@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic | Elimu na Mawaidha</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        body { 
+            background-color: #0a0a0a; /* Giza kama Sizani */
+            color: #eeeeee; 
+            font-family: 'Poppins', sans-serif;
+        /* Animation ya kuhema kwa page nzima kila sekunde 2 */
+            animation: hema 2s ease-in-out infinite;
+        }
+
+        /* Animation ya Kuhema (Page) */
+        @keyframes hema {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(0.99); /* Inajirudisha ndani kidogo kama inavuta pumzi */
+            }
+        }
+    /* Navbar yenye rangi za dhahabu za Sizani */
+        .navbar {
+            background: rgba(0, 0, 0, 0.95) !important;
+            border-bottom: 2px solid #ffc107;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand { 
+            color: #ffc107 !important; 
+            font-weight: bold;
+            font-size: 1.8rem;
+            display: inline-block;
+            /* Animation ya kudunda kama moyo kila sekunde 1 */
+            animation: dundaMoyo 1s infinite;
+        }
+
+        /* Animation ya Kudunda Moyo (Navbar Brand) */
+        @keyframes dundaMoyo {
+            0%, 100% {
+                transform: scale(1);
+            }
+            15% {
+                transform: scale(1.15); /* Kudunda kwa kwanza (Nguvu) */
+            }
+            30% {
+                transform: scale(1.07); /* Kurudi kidogo */
+            }
+            45% {
+                transform: scale(1.15); /* Kudunda kwa pili (Mapigo ya moyo huwa yanadunda mara mbili pacha) */
+            }
+        }
+
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #ffc107 !important;
+        }
+
+        /* Islamic Card Styling */
+        .islamic-card { 
+            background: #161616; 
+            border: 1px solid #2a2a2a; 
+            transition: all 0.4s ease;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .islamic-card:hover { 
+            border-color: #ffc107; 
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 193, 7, 0.15);
+        }
+
+        .card-img-container {
+            overflow: hidden;
+            height: 220px;
+        }
+
+        .card-img-top { 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform 0.6s;
+        }
+
+        .islamic-card:hover .card-img-top {
+            transform: scale(1.1);
+        }
+
+        /* Kitufe cha Dhahabu */
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 10px;
+            color: black;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            color: black;
+            transform: scale(1.02);
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+            color: #ffc107;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            width: 60px;
+            height: 3px;
+            background: #ffc107;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('index') }}">RAMADHANA</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#islamicNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="islamicNav">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                <a class="nav-link" href="{{ url_for('movie.movie_list') }}">Movies</a>
+                <a class="nav-link" href="{{ url_for('sizani.sizani_list') }}">Sizani</a>
+                <a class="nav-link" href="{{ url_for('games') }}">Games</a>
+                <a class="nav-link active" href="{{ url_for('islamic.islamic_list') }}">Islamic</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container my-4 text-center">
+    <div class="search-popup-container">
+        <form action="{{ url_for('search_bp.search') }}" method="GET" class="d-flex shadow">
+            <input type="text" name="q" class="form-control custom-search-input" placeholder="Tafuta movie, sizani au games..." required>
+            <button type="submit" class="btn custom-search-btn">Tafuta</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Bakuli linaloshikilia search (Saizi ya wastani tu) */
+    .search-popup-container {
+        max-width: 500px; /* Saizi ya wastani, haitakuwa kubwa sana */
+        margin: 0 auto;
+        /* Animation inayojitokeza/kuhema kila sekunde 3 */
+        animation: searchBreathe 3s ease-in-out infinite;
+    }
+
+    /* Mfumo wa jinsi animation inavyofanya kazi kila sekunde 3 */
+    @keyframes searchBreathe {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        50% {
+            transform: scale(1.04); /* Inajivuta kwa mbali kidogo sana kuchochea usikivu */
+            box-shadow: 0 10px 25px rgba(255, 193, 7, 0.3); /* Mwanga wa dhahabu unajionyesha */
+        }
+        100% {
+            transform: scale(1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+    }
+
+    /* Muonekano wa sehemu ya kuandikia */
+    .custom-search-input {
+        background-color: #161616 !important;
+        border: 2px solid #2a2a2a !important;
+        color: white !important;
+        border-radius: 30px 0 0 30px !important;
+        padding: 12px 20px !important;
+        font-size: 0.95rem !important;
+    }
+    .custom-search-input:focus {
+        border-color: #ffc107 !important;
+        box-shadow: none !important;
+    }
+
+    /* Muonekano wa kitufe cha dhahabu */
+    .custom-search-btn {
+        background: linear-gradient(45deg, #ffc107, #e0a800) !important;
+        border: none !important;
+        color: black !important;
+        font-weight: bold !important;
+        border-radius: 0 30px 30px 0 !important;
+        padding: 0 25px !important;
+        transition: 0.3s !important;
+    }
+    .custom-search-btn:hover {
+        background: #ffffff !important;
+        color: black !important;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="text-center mb-5" data-aos="fade-down">
+        <h2 class="section-title fw-bold">Mawaidha na Mafundisho</h2>
+        <p class="text-secondary mt-2">Jifunze na uburudike kwa maudhui ya kimaadili - Bure Kabisa</p>
+    </div>
+    
+    <div class="row g-4">
+        {% for item in items %}
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+            <div class="card islamic-card h-100 shadow-sm">
+                <div class="card-img-container">
+                    <img src="{{ item.poster_url }}" class="card-img-top" alt="{{ item.title }}">
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title fw-bold text-warning">{{ item.title }}</h5>
+                    <p class="card-text text-secondary small mb-4">
+                        {{ item.description[:120] }}...
+                    </p>
+                    <div class="mt-auto">
+                        <a href="{{ url_for('watch.watch_content', content_id=item.id) }}" class="btn btn-warning w-100 shadow-sm">
+                            Tazama Mawaidha
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5" data-aos="zoom-in">
+            <h1 class="display-1 text-warning opacity-25">🌙</h1>
+            <p class="lead text-secondary">Bado hakuna mawaidha yaliyowekwa hapa.</p>
+            <a href="{{ url_for('index') }}" class="btn btn-outline-warning">Rudi Nyumbani</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="footer-bottom mt-5">
+        <div class="container text-center py-3 border-top border-secondary">
+            <p class="mb-0">&copy; 2026 <span class="text-warning fw-bold">RAMADHANA Entertainment</span>. Burudani ya Dhahabu Imesheheni.</p>
+            <small class="text-secondary">Designed by DJ RAMADHAN AA</small>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .footer-section {
+        background-color: #050505;
+        padding: 60px 0 0;
+        border-top: 2px solid #ffc107;
+        color: #fff;
+    }
+    .footer-logo {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ffc107;
+        margin-bottom: 20px;
+    }
+    .footer-logo span { color: #fff; }
+    .footer-desc { color: #888; font-size: 0.95rem; }
+    
+    .footer-links h4, .footer-contact h4 {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #ffc107;
+        margin-bottom: 20px;
+        position: relative;
+    }
+    .footer-links ul { list-style: none; padding: 0; }
+    .footer-links ul li { padding: 10px 0; }
+    .footer-links ul li a {
+        color: #ccc;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    .footer-links ul li a:hover { color: #ffc107; padding-left: 5px; }
+
+    .social-links a {
+        font-size: 1.5rem;
+        color: #ccc;
+        margin-right: 15px;
+        transition: 0.3s;
+    }
+    .social-links a:hover { color: #ffc107; }
+    
+    .footer-bottom p { font-size: 0.9rem; color: #aaa; }
+</style>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true,
+        easing: 'ease-out-back'
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

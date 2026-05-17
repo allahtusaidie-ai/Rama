@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unatazama: {{ content.title }} | Ramadhana</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            background-color: #0a0a0a; 
+            color: #eeeeee; 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(0, 0, 0, 0.95) !important;
+            border-bottom: 2px solid #ffc107;
+            backdrop-filter: blur(10px);
+        }
+        .navbar-brand { color: #ffc107 !important; font-weight: bold; }
+        .nav-link { color: #ffffff !important; }
+
+        /* Video Styling */
+        .video-wrapper {
+            max-width: 1000px;
+            margin: 40px auto;
+            position: relative;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        video {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+        }
+
+        /* Pay Overlay */
+        #pay-overlay {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #pay-overlay h2 { color: #ffc107; font-weight: bold; }
+        
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            color: black;
+            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 30px;
+            transition: 0.3s;
+        }
+        .btn-warning:hover {
+            background-color: #e0a800;
+            transform: scale(1.05);
+        }
+
+        /* Content Details */
+        .content-info {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #161616;
+            border-radius: 15px;
+            border: 1px solid #2a2a2a;
+        }
+
+        .category-badge {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            border: 1px solid #ffc107;
+        }
+
+        h1 { font-weight: 700; color: #ffc107; }
+        p { color: #bbb; line-height: 1.8; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand fs-3" href="{{ url_for('index') }}">RAMADHANA</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="{{ url_for('index') }}">Rudi Nyumbani</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="video-wrapper">
+        <div id="pay-overlay">
+            <div class="mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#ffc107" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                    <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                </svg>
+            </div>
+            <h2>Muda wa Bure Umeisha!</h2>
+            <p class="mb-4">Ili kuendelea kutazama hadi mwisho, tafadhali lipia kifurushi cha bei nafuu.</p>
+            <a href="{{ url_for('subscription') }}" class="btn btn-warning shadow-lg">Lipia Sasa (Tsh 500)</a>
+        </div>
+
+        <video id="myVideo" controls controlsList="nodownload" poster="{{ content.poster_url }}">
+            <source src="{{ content.video_url }}" type="video/mp4">
+            Trình duyệt yako haiauni video hizi.
+        </video>
+    </div>
+
+    <div class="content-info shadow">
+        <div class="mb-3">
+            <span class="category-badge">{{ content.category }}</span>
+        </div>
+        <h1>{{ content.title }}</h1>
+        <hr style="border-color: #333;">
+        <h5 class="text-white mb-3">Maelezo:</h5>
+        <p>{{ content.description }}</p>
+    </div>
+</div>
+
+<script>
+    var video = document.getElementById("myVideo");
+    var overlay = document.getElementById("pay-overlay");
+    
+    // Logic ya malipo
+    var hasSubscription = {{ "true" if has_active_subscription else "false" }};
+    var category = "{{ content.category }}"; 
+
+    video.ontimeupdate = function() {
+        // 1. Kama ni Islamic, usimzuie kamwe (Bure)
+        if (category === 'islamic') {
+            return;
+        }
+
+        // 2. Kama siyo Islamic na HAJALIPIA
+        if (!hasSubscription) {
+            // Dakika 5 = sekunde 300
+            if (video.currentTime >= 300) {
+                video.pause();
+                video.controls = false; // Ondoa controls ili asirudishe nyuma
+                overlay.style.display = "flex";
+                
+                // Exit fullscreen kama ipo
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    };
+
+    // Zuia ku-screenshot au right click (hiari)
+    document.addEventListener('contextmenu', event => event.preventDefault());
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingia (Login) | Ramadhana Website</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        body { 
+            background-color: #0a0a0a; /* Giza la Sizani */
+            color: #eeeeee; 
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+        /* Animation ya kuhema kwa page nzima kila sekunde 2 */
+            animation: hema 2s ease-in-out infinite;
+        }
+
+        /* Animation ya Kuhema (Page) */
+        @keyframes hema {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(0.99); /* Inajirudisha ndani kidogo kama inavuta pumzi */
+            }
+        }
+
+      /* Navbar yenye rangi za dhahabu za Sizani */
+        .navbar {
+            background: rgba(0, 0, 0, 0.95) !important;
+            border-bottom: 2px solid #ffc107;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand { 
+            color: #ffc107 !important; 
+            font-weight: bold;
+            font-size: 1.8rem;
+            display: inline-block;
+            /* Animation ya kudunda kama moyo kila sekunde 1 */
+            animation: dundaMoyo 1s infinite;
+        }
+
+        /* Animation ya Kudunda Moyo (Navbar Brand) */
+        @keyframes dundaMoyo {
+            0%, 100% {
+                transform: scale(1);
+            }
+            15% {
+                transform: scale(1.15); /* Kudunda kwa kwanza (Nguvu) */
+            }
+            30% {
+                transform: scale(1.07); /* Kurudi kidogo */
+            }
+            45% {
+                transform: scale(1.15); /* Kudunda kwa pili (Mapigo ya moyo huwa yanadunda mara mbili pacha) */
+            }
+        }
+
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #ffc107 !important;
+        }
+        /* Login Card Styling */
+        .login-container { max-width: 450px; margin-top: 60px; margin-bottom: 60px; }
+        
+        .card { 
+            background: #161616; 
+            border: 1px solid #2a2a2a; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        /* Input Styling */
+        .form-control {
+            background-color: #0f0f0f;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .form-control:focus {
+            background-color: #1a1a1a;
+            border-color: #ffc107;
+            color: white;
+            box-shadow: 0 0 8px rgba(255, 193, 7, 0.2);
+        }
+        .form-label { color: #ffc107; font-weight: 500; }
+
+        /* Kitufe cha Dhahabu */
+        .btn-primary {
+            background-color: #ffc107;
+            border: none;
+            color: black;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+            color: black;
+        }
+
+        .text-warning-custom { color: #ffc107; text-decoration: none; }
+        .text-warning-custom:hover { text-decoration: underline; }
+
+        hr { border-top: 1px solid #333; opacity: 1; }
+        
+        .form-check-input:checked {
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow">
+    <div class="container">
+        <a class="navbar-brand fs-3" href="{{ url_for('index') }}">RAMADHANA</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('movie') }}">Movies</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('sizani') }}">Sizani</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('games') }}">Games</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('islamic') }}">Islamic</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container d-flex justify-content-center">
+    <div class="login-container w-100" data-aos="fade-up" data-aos-duration="800">
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show border-0" role="alert" style="border-radius: 12px;">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="card p-4 shadow">
+            <div class="text-center mb-4">
+                <h3 class="fw-bold">Ingia <span style="color: #ffc107;">Akaunti</span></h3>
+                <p class="text-secondary small">Karibu tena kwenye ulimwengu wa dhahabu</p>
+            </div>
+
+            <form action="{{ url_for('login.login') }}" method="POST">
+                
+                <div class="mb-3">
+                    <label for="username" class="form-label">Jina la Mtumiaji</label>
+                    <input type="text" name="username" class="form-control" id="username" placeholder="Ingiza jina lako" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Nenosiri (Password)</label>
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Ingiza nenosiri" required>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="remember">
+                    <label class="form-check-label text-secondary small" for="remember">Nikumbuke</label>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary">Ingia Sasa</button>
+                </div>
+                
+                <hr class="my-4">
+                
+                <div class="text-center">
+                    <p class="mb-2"><a href="{{ url_for('forgot_password') }}" class="text-warning-custom small">Umesahau Nenosiri?</a></p>
+                    <p class="mb-0 text-secondary small">
+                        Huna akaunti? 
+                        <a href="{{ url_for('register.register') }}" class="text-warning-custom fw-bold">Jisajili hapa</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
